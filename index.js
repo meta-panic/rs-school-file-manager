@@ -76,7 +76,7 @@ class App {
    * @private
    */
   #sayGoodBye() {
-    this.#logger.printLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "pink");
+    this.#logger.printLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "green");
   }
 }
 

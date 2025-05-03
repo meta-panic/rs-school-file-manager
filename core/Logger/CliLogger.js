@@ -1,5 +1,3 @@
-import { EOL } from "node:os";
-
 import AbstractLogger from "./AbstractLogger.js";
 
 
@@ -13,27 +11,19 @@ export default class CliLogger extends AbstractLogger {
    * @param {"red"|"green"|"yellow"|"blue"|"pink"} [color] - Optional color name to apply
    * @returns {void}
    */
-  writeLine(message = "", color) {
+  printLine(message = "", color) {
     if (!this.#getStream().writable) {
       console.warn("Attempted to write but readline instance is not available.");
       return;
     }
 
     const formattedMessage = !!color && !!colorize[color]
-      ? this.#colorizeMessage(this.#addEOL(message), color)
-      : this.#addEOL(message);
+      ? this.#colorizeMessage(message, color)
+      : message;
+
     this.#getStream().write(formattedMessage);
   }
 
-  /**
-   * Ensures message ends with the OS-specific EOL sequence
-   * @private
-   * @param {string} message - Input message to process
-   * @returns {string} Message with guaranteed EOL at end
-   */
-  #addEOL(message) {
-    return message.endsWith(EOL) ? message : message + EOL;
-  }
 
   /**
    * Applies ANSI color codes to the message
@@ -44,6 +34,26 @@ export default class CliLogger extends AbstractLogger {
    */
   #colorizeMessage(message, color) {
     return colorize[color](message);
+  }
+
+  /**
+   * Logs errors with standard formatting and stack traces
+   * @param {Error|string} error - Error instance or message
+   * @param {Object} [options]
+   * @param {boolean} [options.withStack=false] - Show full stack trace
+   */
+  printError(error, { withStack = false, withCause = true } = {}) {
+    let message = this.#colorizeMessage(`ERROR: ${error.message}`, "red");
+
+    if (withCause && error.cause) {
+      message += this.#colorizeMessage(`\nCause: ${error.cause}` , "red");
+    }
+
+    if (withStack && error.stack) {
+      message += `\nStack trace:\n${error.stack}`
+    }
+
+    this.#getStream().write(message);
   }
 }
 

@@ -1,33 +1,44 @@
 import * as COMMANDS from "./commands/listCommands.js";
+import AbstractLogger from "./core/Logger/AbstractLogger.js";
 
-
+/**
+ * Executes CLI commands based on user input
+ * @param {Object} params
+ * @param {string} params.input - Raw CLI input string to parse and execute
+ * @param {AppContext} params.context - Application state container
+ * @param {AbstractLogger} params.logger - Configured logger instance
+ * @returns {void}
+ * 
+ */
 export function runCommand({ input: line, context: ctx, logger }) {
-  let command, keys, args;
+  let parsed;
   try {
-    const parsed = parseCommand(line);
-    command = parsed.command;
-    keys = parsed.keys;
-    args = parsed.args;
+    parsed = parseCommand(line);
   }
   catch (error) {
-    COMMANDS.help(logger);
+    COMMANDS.help({ logger });
     return;
   }
 
   try {
-    switch(command) {
+    switch(parsed.command) {
       case ".exit": {  
         process.exit(0);
       }
       case "up": {
-        COMMANDS.up(ctx);
+        COMMANDS.up({ ctx });
+        break;
+      }
+      case "cd": {
+        COMMANDS.cd({ ctx, args: parsed.args });
         break;
       }
       default: {
-        COMMANDS.help(logger)
+        COMMANDS.help({ logger });
       }
     }
   } catch(error) {
+    logger.printError(error);
   }
 }
 

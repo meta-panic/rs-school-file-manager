@@ -4,7 +4,7 @@ import getAppArgs from "./utils/ArgsParser.js";
 import AppContext from "./core/Context.js";
 import CliHandler from "./core/CliHandler.js";
 import CliLogger from "./core/Logger/CliLogger.js";
-import { runCommand } from "./parseCommand.js";
+import { runCommand } from "./CommandRunner.js";
 
 
 class App {
@@ -60,7 +60,7 @@ class App {
    * @private
    */
   #sayHello() {
-    this.#logger.writeLine(`Welcome to the File Manager, ${this.#context.getUserName()}!`, "green");
+    this.#logger.printLine(`Welcome to the File Manager, ${this.#context.getUserName()}!`, "green");
   }
 
   /**
@@ -68,7 +68,7 @@ class App {
    * @private
    */
   #printCurrentDir() {
-    this.#logger.writeLine(`You are currently in ${process.cwd()}`, "pink");
+    this.#logger.printLine(`You are currently in ${process.cwd()}`, "pink");
   }
 
   /**
@@ -76,7 +76,7 @@ class App {
    * @private
    */
   #sayGoodBye() {
-    this.#logger.writeLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "pink");
+    this.#logger.printLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "pink");
   }
 }
 

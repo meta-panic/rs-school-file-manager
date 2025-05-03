@@ -1,5 +1,7 @@
 import * as COMMANDS from "./commands/listCommands.js";
 import AbstractLogger from "./core/Logger/AbstractLogger.js";
+import { ERRORS } from "./consts.js";
+
 
 /**
  * Executes CLI commands based on user input
@@ -38,7 +40,11 @@ export function runCommand({ input: line, context: ctx, logger }) {
       }
     }
   } catch(error) {
-    logger.printError(error);
+    if (Object.values(ERRORS).includes(error.message)) {
+      logger.printError(error);
+    } else {
+      logger.printError(new Error(ERRORS.OPERATION_FAILED, { cause: error }))
+    }
   }
 }
 

@@ -1,11 +1,11 @@
 import path from 'node:path';
-import fs from 'node:fs';
 
 import { isAFolderDeeperThenB, arePathsEqual } from "./utils.js";
+import { ERRORS } from '../../consts.js';
 
 export function cd({ ctx, args }) {
   if (args.length != 1) {
-    throw new Error("FS error",
+    throw new Error(ERRORS.INVALID_INPUT,
       { cause: `cd expects only 1 argument, got ${args.length}`}
     );
   }
@@ -19,7 +19,7 @@ export function cd({ ctx, args }) {
       process.chdir(args[0]);
       return;
     } else {
-      throw new Error("FS error during cd", { cause: "you are probably trying to move out of you home directory. It is forbidden." });
+      throw new Error(ERRORS.OPERATION_FAILED, { cause: "you are probably trying to move out of you home directory. It is forbidden." });
     }
   } catch (error) {
     throw error;

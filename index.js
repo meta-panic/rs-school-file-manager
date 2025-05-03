@@ -1,66 +1,92 @@
-import * as readline from 'node:readline/promises';
-import process, { stdin as input, stdout as output } from 'node:process';
-import { EOL } from 'node:os';
+import process from "node:process";
 
-import { runCommand } from "./parseCommand.js";
 import getAppArgs from "./utils/ArgsParser.js";
 import AppContext from "./core/Context.js";
+import CliHandler from "./core/CliHandler.js";
+import CliLogger from "./core/Logger/CliLogger.js";
+import { runCommand } from "./parseCommand.js";
 
 
 class App {
   #context;
-  #readline;
+  #cliHandler;
+  #logger;
 
-  constructor(ctx) {
+  /**
+   * @param {Object} dependencies 
+   * @param {AppContext} dependencies.ctx - Application context/store
+   * @param {CliHandler} dependencies.cliHandler - CLI input handler
+   * @param {CliLogger} dependencies.logger - Configured logger instance
+   */
+  constructor({ ctx, cliHandler, logger }) {
     this.#context = ctx;
+    this.#cliHandler = cliHandler;
+    this.#logger = logger;
   }
 
+	/**
+   * @returns {App} Returns self for chaining
+   */
 	init() {
     const args = getAppArgs(process.argv, "username");
     this.#context.setUser(args || "anonimus user");
-    this.#readline = readline.createInterface({ input, output });
 
     return this;
 	}
 
+  /**
+   * @returns {void}
+   */
   run() {
     this.#sayHello();
-    this.#readline.on("line", (input) => {
-      this.#printCurrentDir();
-      runCommand(input, this.#context);
+    this.#printCurrentDir();
+
+    this.#cliHandler.on("line", (input) => {
+      runCommand({input, context: this.#context, logger: this.#logger });
       this.#printCurrentDir();
     });
 
     process.on("exit", () => {
-      this.#readline.close();
       this.#sayGoodBye();
+    });
+
+    process.on("SIGINT", () => {
       process.exit(0);
     });
   }
 
+  /**
+   * Displays welcome message with current user
+   * @private
+   */
   #sayHello() {
-    if(!this.#readline) {
-      return;
-    }
-
-    this.#readline.output.write(`Welcome to the File Manager, ${this.#context.getUserName()}!${EOL}`);
+    this.#logger.writeLine(`Welcome to the File Manager, ${this.#context.getUserName()}!`, "green");
   }
 
+  /**
+   * Prints current working directory to CLI
+   * @private
+   */
   #printCurrentDir() {
-    this.#readline.output.write(`You are currently in ${process.cwd()}\n`);
+    this.#logger.writeLine(`You are currently in ${process.cwd()}`, "pink");
   }
 
+  /**
+   * Displays farewell message on application exit
+   * @private
+   */
   #sayGoodBye() {
-    if(!this.#readline) {
-      return;
-    }
-    
-    this.#readline.output.write(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!\n`);
+    this.#logger.writeLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "pink");
   }
 }
 
+
 const ctx = new AppContext();
-const app = new App(ctx);
+const logger = new CliLogger(process.stdout);
+const cliHandler = new CliHandler();
+const app = new App({
+  ctx, cliHandler, logger
+});
 
 app
   .init()

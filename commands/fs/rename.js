@@ -1,4 +1,5 @@
 import { rename as fsRename } from "fs/promises";
+import path from "node:path";
 
 import { ERRORS } from "../../consts.js";
 import { doFileOrFolderExist } from "../utils.js";
@@ -25,6 +26,6 @@ export async function rename({ args }) {
     );
   }
 
-  await fsRename(oldName, newName);
+  await fsRename(oldName, path.join(path.dirname(oldName), newName));
 }
 

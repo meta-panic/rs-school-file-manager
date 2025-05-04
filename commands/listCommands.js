@@ -4,9 +4,10 @@ import { ls } from "./navigation/ls.js";
 
 import { cat } from "./fs/cat.js";
 import { add } from "./fs/add.js";
+import { mkdir } from "./fs/mkdir.js";
 
 import { help } from "./help/help.js";
 
 
-export { up, cd, ls, cat, add, help };
+export { up, cd, ls, cat, add, mkdir, help };
 

@@ -48,6 +48,10 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           await COMMANDS.add({ args: parsed.args });
           break;
         }
+        case "mkdir": {
+          await COMMANDS.mkdir({ args: parsed.args });
+          break;
+        }
         default: {
           throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
         }

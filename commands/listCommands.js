@@ -12,8 +12,10 @@ import { rm } from "./fs/delete.js";
 
 import { osCommand } from "./os/os.js";
 
+import { hash } from "./hash/hash.js";
+
 import { help } from "./help/help.js";
 
 
-export { up, cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, help };
+export { up, cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, hash, help };
 

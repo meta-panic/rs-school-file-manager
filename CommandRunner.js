@@ -76,6 +76,10 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           COMMANDS.osCommand({ keys: parsed.keys, logger });
           break;
         }
+        case "hash": {
+          await COMMANDS.hash({ args: parsed.args, logger });
+          break;
+        }
         default: {
           throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
         }

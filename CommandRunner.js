@@ -56,6 +56,10 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           await COMMANDS.rename({ args: parsed.args });
           break;
         }
+        case "cp": {
+          await COMMANDS.copy({ args: parsed.args });
+          break;
+        }
         default: {
           throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
         }

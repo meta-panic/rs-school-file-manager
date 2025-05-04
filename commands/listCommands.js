@@ -6,9 +6,10 @@ import { cat } from "./fs/cat.js";
 import { add } from "./fs/add.js";
 import { mkdir } from "./fs/mkdir.js";
 import { rename } from "./fs/rename.js";
+import { copy } from "./fs/copy.js";
 
 import { help } from "./help/help.js";
 
 
-export { up, cd, ls, cat, add, mkdir, rename, help };
+export { up, cd, ls, cat, add, mkdir, rename, copy, help };
 

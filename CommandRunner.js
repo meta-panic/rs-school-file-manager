@@ -80,6 +80,14 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           await COMMANDS.hash({ args: parsed.args, logger });
           break;
         }
+        case "compress": {
+          await COMMANDS.compress({ args: parsed.args, logger });
+          break;
+        }
+        case "decompress": {
+          await COMMANDS.decompress({ args: parsed.args, logger });
+          break;
+        }
         default: {
           throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
         }

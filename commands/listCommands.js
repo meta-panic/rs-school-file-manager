@@ -14,8 +14,11 @@ import { osCommand } from "./os/os.js";
 
 import { hash } from "./hash/hash.js";
 
+import { compress } from "./archives/compress.js";
+import { decompress } from "./archives/decompress.js";
+
 import { help } from "./help/help.js";
 
 
-export { up, cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, hash, help };
+export { up, cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, hash, compress, decompress, help };
 

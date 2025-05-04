@@ -44,6 +44,10 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           await COMMANDS.cat({ logger, args: parsed.args });
           break;
         }
+        case "add": {
+          await COMMANDS.add({ args: parsed.args });
+          break;
+        }
         default: {
           throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
         }

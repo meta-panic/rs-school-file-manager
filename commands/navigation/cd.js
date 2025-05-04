@@ -1,6 +1,6 @@
 import path from "node:path";
 
-import { isAFolderDeeperThenB, arePathsEqual } from "./utils.js";
+import { isAFolderDeeperThenB, arePathsEqual } from "../utils.js";
 import { ERRORS } from "../../consts.js";
 
 

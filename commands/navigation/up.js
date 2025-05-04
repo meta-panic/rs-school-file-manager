@@ -1,4 +1,4 @@
-import { isAFolderDeeperThenB } from "./utils.js";
+import { isAFolderDeeperThenB } from "../utils.js";
 
 
 export function up({ ctx }) {

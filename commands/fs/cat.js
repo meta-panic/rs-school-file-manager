@@ -5,7 +5,7 @@ import { ERRORS } from "../../consts.js";
 
 
 export async function cat({ args, logger }) {
-  await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (args.length != 1) {
       throw new Error(ERRORS.INVALID_INPUT,
         { cause: `cat expects only 1 argument, got ${args.length}`}
@@ -13,7 +13,6 @@ export async function cat({ args, logger }) {
     }
 
     const filePath = path.resolve(args[0]);
-
     const readable = createReadStream(filePath, { encoding: "utf8" });
 
     readable.on("data", (chunk) => {
@@ -27,6 +26,6 @@ export async function cat({ args, logger }) {
     readable.on("end", () => {
       resolve();
     });
-  })
+  });
 }
 

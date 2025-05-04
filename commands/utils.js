@@ -1,4 +1,5 @@
 import path from "path";
+import * as fs from 'node:fs/promises'
 
 /**
  * Determines if folder A is a subdirectory of folder B
@@ -45,4 +46,35 @@ export function isAFolderDeeperThenB({ aFolder, bFolder }) {
  */
 export function arePathsEqual({ pathA, pathB }) {
   return path.resolve(pathA) === path.resolve(pathB);
+}
+
+/**
+ * Checks if a file or folder exists at the specified path.
+ * 
+ * @async
+ * @function doFileOrFolderExist
+ * @param {string} path - The absolute path to the file or folder to check.
+ * @returns {Promise<boolean>} A promise that resolves to true if the file or folder exists, 
+ *                             and false if it does not.
+ * @throws {Error} Throws an error if there is an issue accessing the path (other than it not existing).
+ * 
+ * @example
+ * doFileOrFolderExist('/path/to/file/or/folder')
+ *   .then(exists => {
+ *     console.log(exists); // true if exists, false if not
+ *   })
+ *   .catch(error => {
+ *     console.error('Error checking existence:', error);
+ *   });
+ */
+export async function doFileOrFolderExist(path) {
+  try {
+      await fs.access(path, fs.constants.F_OK);
+      return true;
+  } catch (err) {
+      if (err.code === 'ENOENT') {
+          return false;
+      }
+      throw err;
+  }
 }

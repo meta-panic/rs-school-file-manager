@@ -28,6 +28,10 @@ export async function runCommand({ input: line, context: ctx, logger }) {
         case ".exit": {  
           process.exit(0);
         }
+        case "help": {
+          COMMANDS.help({ logger });
+          break;
+        }
         case "up": {
           COMMANDS.up({ ctx });
           break;
@@ -58,6 +62,18 @@ export async function runCommand({ input: line, context: ctx, logger }) {
         }
         case "cp": {
           await COMMANDS.copy({ args: parsed.args });
+          break;
+        }
+        case "mv": {
+          await COMMANDS.mv({ args: parsed.args });
+          break;
+        }
+        case "rm": {
+          await COMMANDS.rm({ args: parsed.args });
+          break;
+        }
+        case "os": {
+          COMMANDS.osCommand({ keys: parsed.keys, logger });
           break;
         }
         default: {

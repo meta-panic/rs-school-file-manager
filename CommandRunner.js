@@ -9,43 +9,54 @@ import { ERRORS } from "./consts.js";
  * @param {string} params.input - Raw CLI input string to parse and execute
  * @param {AppContext} params.context - Application state container
  * @param {AbstractLogger} params.logger - Configured logger instance
- * @returns {void}
+ * @returns {Promise<void>}
  * 
  */
-export function runCommand({ input: line, context: ctx, logger }) {
-  let parsed;
-  try {
-    parsed = parseCommand(line);
-  }
-  catch (error) {
-    COMMANDS.help({ logger });
-    return;
-  }
-
-  try {
-    switch(parsed.command) {
-      case ".exit": {  
-        process.exit(0);
+export async function runCommand({ input: line, context: ctx, logger }) {
+  return new Promise(async (resolve, reject) => {
+    let parsed;
+    try {
+      parsed = parseCommand(line);
+    }
+    catch (error) {
+      COMMANDS.help({ logger });
+      return;
+    }
+  
+    try {
+      switch(parsed.command) {
+        case ".exit": {  
+          process.exit(0);
+        }
+        case "up": {
+          COMMANDS.up({ ctx });
+          break;
+        }
+        case "cd": {
+          COMMANDS.cd({ ctx, args: parsed.args });
+          break;
+        }
+        case "ls": {
+          COMMANDS.ls({ logger });
+          break;
+        }
+        case "cat": {
+          await COMMANDS.cat({ logger, args: parsed.args });
+          break;
+        }
+        default: {
+          throw new Error(ERRORS.INVALID_INPUT, { cause: "the command does not exist" });
+        }
       }
-      case "up": {
-        COMMANDS.up({ ctx });
-        break;
-      }
-      case "cd": {
-        COMMANDS.cd({ ctx, args: parsed.args });
-        break;
-      }
-      default: {
-        COMMANDS.help({ logger });
+    } catch(error) {
+      if (Object.values(ERRORS).includes(error?.message)) {
+        logger.printError(error);
+      } else {
+        logger.printError(new Error(ERRORS.OPERATION_FAILED, { cause: error }))
       }
     }
-  } catch(error) {
-    if (Object.values(ERRORS).includes(error.message)) {
-      logger.printError(error);
-    } else {
-      logger.printError(new Error(ERRORS.OPERATION_FAILED, { cause: error }))
-    }
-  }
+    resolve();
+  });
 }
 
 
@@ -64,7 +75,12 @@ export function parseCommand(line) {
     return null;
   }
 
-  const parts = trimmedLine.split(/\s+/); 
+  const regex = /"([^"]*)"|[^\s"]+/g;
+  const parts = [];
+  let match;
+  while ((match = regex.exec(trimmedLine)) !== null) {
+    parts.push(match[1] !== undefined ? match[1] : match[0]);
+  }
 
   const command = parts[0];
   const keys = [];

@@ -55,6 +55,44 @@ export default class CliLogger extends AbstractLogger {
 
     this.#getStream().write(message);
   }
+
+  /**
+   * Print table
+   * @param {Object[]} data - Array of objects to display
+   * @param {Object} [options]
+   * @param {string[]} [options.columns] - Ordered list of columns to display
+   * @param {Object<string, string>} [options.colors] - Color per column header
+   * @param {number} [options.minPadding=2] - Minimum space between columns
+   */
+  printTable(data, { columns, colors = {}, minPadding = 2 } = {}) {
+    if (!data.length) return;
+
+    const cols = columns || Object.keys(data[0]);
+    
+    const widths = cols.reduce((acc, col) => {
+      acc[col] = Math.max(
+        col.length,
+        ...data.map(row => String(row[col] || "").length)
+      );
+      return acc;
+    }, {});
+
+    // Print headers
+    const header = cols.map(col => {
+      const text = col.padEnd(widths[col] + minPadding);
+      return colors[col] ? this.#colorizeMessage(text, colors[col]) : text;
+    }).join("");
+    this.printLine(header);
+
+    // Print rows
+    data.forEach(row => {
+      const line = cols.map(col => {
+        const value = String(row[col] || "").padEnd(widths[col] + minPadding);
+        return colors[col] ? this.#colorizeMessage(value, colors[col]) : value;
+      }).join("");
+      this.printLine(line);
+    });
+  }
 }
 
 const colorize = {
@@ -62,6 +100,6 @@ const colorize = {
   green:  (text) => `\x1b[32m${text}\x1b[0m`,
   yellow: (text) => `\x1b[33m${text}\x1b[0m`,
   blue:   (text) => `\x1b[34m${text}\x1b[0m`,
-  pink:   (text) => `\x1b[35m${text}\x1b[0m`
+  pink:   (text) => `\x1b[35m${text}\x1b[0m`,
 };
 

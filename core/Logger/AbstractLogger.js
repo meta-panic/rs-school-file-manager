@@ -57,6 +57,18 @@ export default class AbstractLogger {
     throw new Error("Method 'writeLine' must be implemented.");
   }
 
+
+    /**
+   * Print table
+   * @param {Object[]} data - Array of objects to display
+   * @param {Object} [options]
+   * @param {string[]} [options.columns] - Ordered list of columns to display
+   * @param {Object<string, string>} [options.colors] - Color per column header
+   * @param {number} [options.minPadding=2] - Minimum space between columns
+   */
+    printTable(data, { columns, colors = {}, minPadding = 2 } = {}) {
+      throw new Error("Method 'printTable' must be implemented.");
+    }
 }
 
 

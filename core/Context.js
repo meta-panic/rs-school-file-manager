@@ -4,7 +4,8 @@ export default class Context {
   #userName;
   #homeDirectory;
   constructor() {
-    this.#homeDirectory = os.homedir(); 
+    this.#homeDirectory = os.homedir();
+    process.chdir(os.homedir());
   }
 
   setUser(userName) {

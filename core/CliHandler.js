@@ -8,7 +8,7 @@ export default class CliHandler extends EventEmitter {
 
   constructor() {
     super();
-    this.#readlineInstance = readline.createInterface({ input });
+    this.#readlineInstance = readline.createInterface({ input, output });
 
     this.#readlineInstance.on("line", (line) => {
       this.emit("line", line.trim());
@@ -17,6 +17,12 @@ export default class CliHandler extends EventEmitter {
     this.#readlineInstance.on("close", () => {
       this.#readlineInstance.close();
     });
+
+    this.#readlineInstance.setPrompt("> ");
+  }
+
+  prompt() {
+    this.#readlineInstance.prompt(true);
   }
 
   close() {

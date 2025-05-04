@@ -40,10 +40,12 @@ class App {
   run() {
     this.#sayHello();
     this.#printCurrentDir();
+    this.#cliHandler.prompt();
 
-    this.#cliHandler.on("line", (input) => {
-      runCommand({input, context: this.#context, logger: this.#logger });
+    this.#cliHandler.on("line", async (input) => {
+      await runCommand({input, context: this.#context, logger: this.#logger });
       this.#printCurrentDir();
+      this.#cliHandler.prompt();
     });
 
     process.on("exit", () => {
@@ -60,7 +62,8 @@ class App {
    * @private
    */
   #sayHello() {
-    this.#logger.printLine(`Welcome to the File Manager, ${this.#context.getUserName()}!`, "green");
+    this.#logger
+      .printLine(`Welcome to the File Manager, ${this.#context.getUserName()}!`, "green");
   }
 
   /**
@@ -76,7 +79,8 @@ class App {
    * @private
    */
   #sayGoodBye() {
-    this.#logger.printLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "green");
+    this.#logger
+      .printLine(`Thank you for using File Manager, ${this.#context.getUserName()}, goodbye!`, "green");
   }
 }
 

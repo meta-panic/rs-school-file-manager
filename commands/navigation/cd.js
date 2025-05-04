@@ -1,7 +1,8 @@
-import path from 'node:path';
+import path from "node:path";
 
 import { isAFolderDeeperThenB, arePathsEqual } from "./utils.js";
-import { ERRORS } from '../../consts.js';
+import { ERRORS } from "../../consts.js";
+
 
 export function cd({ ctx, args }) {
   if (args.length != 1) {
@@ -13,9 +14,10 @@ export function cd({ ctx, args }) {
   
   try {
     const targetPath = path.resolve(process.cwd(), args[0]);
-    if (isAFolderDeeperThenB({ aFolder: targetPath, bFolder: ctx.getHomeDirectory()})
-      || arePathsEqual({ pathA: targetPath, pathB: ctx.getHomeDirectory() }) 
-  ) {
+    const isCurrentFolderDeeperThanHome = isAFolderDeeperThenB({ aFolder: targetPath, bFolder: ctx.getHomeDirectory()})
+      || arePathsEqual({ pathA: targetPath, pathB: ctx.getHomeDirectory()});
+
+    if (isCurrentFolderDeeperThanHome) {
       process.chdir(args[0]);
       return;
     } else {

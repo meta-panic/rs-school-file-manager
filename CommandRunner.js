@@ -28,7 +28,7 @@ export async function runCommand({ input: line, context: ctx, logger }) {
         case ".exit": {  
           process.exit(0);
         }
-        case "help": {
+        case ".help": {
           COMMANDS.help({ logger });
           break;
         }

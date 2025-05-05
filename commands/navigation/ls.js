@@ -1,7 +1,7 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 
-export function ls({ logger }) {
-  const files = fs.readdirSync(process.cwd(), { recursive: false, withFileTypes: true })
+export async function ls({ logger }) {
+  const files = (await fs.readdir(process.cwd(), { withFileTypes: true }))
     .map((file) => {
       return {
         name: file.name,

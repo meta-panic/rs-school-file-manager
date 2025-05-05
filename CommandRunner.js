@@ -40,7 +40,7 @@ export async function runCommand({ input: line, logger }) {
           break;
         }
         case "ls": {
-          COMMANDS.ls({ logger });
+          await COMMANDS.ls({ logger });
           break;
         }
         case "cat": {

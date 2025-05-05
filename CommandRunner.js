@@ -81,11 +81,11 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           break;
         }
         case "compress": {
-          await COMMANDS.compress({ args: parsed.args, logger });
+          await COMMANDS.archives({ args: parsed.args, logger, flag: "compress" });
           break;
         }
         case "decompress": {
-          await COMMANDS.decompress({ args: parsed.args, logger });
+          await COMMANDS.archives({ args: parsed.args, logger, flag: "decompress" });
           break;
         }
         default: {

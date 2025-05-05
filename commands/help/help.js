@@ -10,6 +10,7 @@ export function help({ logger }) {
     logger.printLine("  rn <path> <newFilename>    Rename file at <path> to <newFilename>");
     logger.printLine("  cp <path> <destination>    Copy file from <path> to <destination>");
     logger.printLine("  mv <path> <destination>    Move file from <path> to <destination>");
+    logger.printLine("  mkdir <newDirectoryName>   Create new directory in current working directory");
     logger.printLine("  rm <path>                  Remove (delete) the file at <path>");
     logger.printLine("");
     logger.printLine("  os --EOL                   Get the OS-specific End-Of-Line marker");
@@ -22,8 +23,8 @@ export function help({ logger }) {
     logger.printLine("  compress <path> <dest>     Compress <path> to <dest> using Brotli");
     logger.printLine("  decompress <path> <dest>   Decompress <path> to <dest> using Brotli");
     logger.printLine("");
-    logger.printLine("  help                       Show this help message");
-    logger.printLine("  exit                       Exit the application");
+    logger.printLine("  .help                       Show this help message");
+    logger.printLine("  .exit                       Exit the application");
   } catch (error) {
     throw new Error(ERRORS.OPERATION_FAILED, { cause: error });
   }

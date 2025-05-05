@@ -7,13 +7,12 @@ import { ERRORS } from "./consts.js";
  * Executes CLI commands based on user input
  * @param {Object} params
  * @param {string} params.input - Raw CLI input string to parse and execute
- * @param {AppContext} params.context - Application state container
  * @param {AbstractLogger} params.logger - Configured logger instance
  * @returns {Promise<void>}
  * 
  */
-export async function runCommand({ input: line, context: ctx, logger }) {
-  return new Promise(async (resolve, reject) => {
+export async function runCommand({ input: line, logger }) {
+  return new Promise(async (resolve) => {
     let parsed;
     try {
       parsed = parseCommand(line);
@@ -33,11 +32,11 @@ export async function runCommand({ input: line, context: ctx, logger }) {
           break;
         }
         case "up": {
-          COMMANDS.up({ ctx });
+          COMMANDS.cd({ args: [".."] });
           break;
         }
         case "cd": {
-          COMMANDS.cd({ ctx, args: parsed.args });
+          COMMANDS.cd({ args: parsed.args });
           break;
         }
         case "ls": {

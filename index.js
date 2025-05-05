@@ -43,7 +43,7 @@ class App {
     this.#cliHandler.prompt();
 
     this.#cliHandler.on("line", async (input) => {
-      await runCommand({input, context: this.#context, logger: this.#logger });
+      await runCommand({input, logger: this.#logger });
       this.#printCurrentDir();
       this.#cliHandler.prompt();
     });

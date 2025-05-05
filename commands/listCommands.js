@@ -1,4 +1,3 @@
-import { up } from "./navigation/up.js";
 import { cd } from "./navigation/cd.js";
 import { ls } from "./navigation/ls.js";
 
@@ -19,5 +18,5 @@ import { archives } from "./archives/archives.js";
 import { help } from "./help/help.js";
 
 
-export { up, cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, hash, archives, help };
+export { cd, ls, cat, add, mkdir, rename, copy, mv, rm, osCommand, hash, archives, help };
 
